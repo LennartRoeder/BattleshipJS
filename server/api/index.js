@@ -1,21 +1,10 @@
-var baucis = require('baucis');
+var express = require('express');
+var controller = require('./api.controller');
 
-var normalizedPath = require("path").join(__dirname, "models");
-
-// require all files from the models directory
-require('fs').readdirSync(normalizedPath).forEach(function(file) {
-	require("./models/" + file);
-});
+var router = express.Router();
 
 
-module.exports = {
-	init: function () {
-		createUserID();
-	}
-};
+router.get('/getUserID', controller.getUserId);
 
-var createUserID = function () {
-	baucis.rest({
-		singular: 'userID'
-	});
-};
+
+module.exports = router;
