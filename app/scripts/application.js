@@ -1,23 +1,21 @@
 define([
-	'backbone',
-	'communicator',
-	'hbs!tmpl/welcome'
-],
+	'marionette',
+	'views/main_layout'
+], function (
+	Marionette,
+	MainView
+) {
+	'use strict';
 
-function( Backbone, Communicator, Welcome_tmpl ) {
-    'use strict';
-
-	var welcomeTmpl = Welcome_tmpl;
-
-	var App = new Backbone.Marionette.Application();
+	var App = new Marionette.Application();
 
 	/* Add application regions here */
-	App.addRegions({});
+	App.addRegions({
+		mainRegion: '.main'
+	});
 
-	/* Add initializers here */
-	App.addInitializer( function () {
-		document.body.innerHTML = welcomeTmpl({ success: "CONGRATS!" });
-		Communicator.mediator.trigger("APP:START");
+	App.addInitializer(function(){
+		App.mainRegion.show(new MainView());
 	});
 
 	return App;

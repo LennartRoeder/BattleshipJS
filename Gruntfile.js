@@ -1,15 +1,10 @@
 'use strict';
-var lrSnippet = require('grunt-contrib-livereload/lib/utils').livereloadSnippet;
-var mountFolder = function (connect, dir) {
-    return connect.static(require('path').resolve(dir));
-};
 
 // # Globbing
 // for performance reasons we're only matching one level down:
 // 'test/spec/{,*/}*.js'
 // use this if you want to match all subfolders:
 // 'test/spec/**/*.js'
-// templateFramework: 'handlebars'
 
 module.exports = function (grunt) {
     // load all grunt tasks
@@ -28,21 +23,20 @@ module.exports = function (grunt) {
 
         // watch list
         watch: {
-            
+
             compass: {
                 files: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
                 tasks: ['compass']
             },
-            
+
             livereload: {
                 files: [
-                    
                     '<%= yeoman.app %>/*.html',
                     '{.tmp,<%= yeoman.app %>}/styles/{,**/}*.css',
                     '{.tmp,<%= yeoman.app %>}/scripts/{,**/}*.js',
                     '{.tmp,<%= yeoman.app %>}/templates/{,**/}*.hbs',
                     '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp}',
-                    
+					'server/**/*.js',
                     'test/spec/{,**/}*.js'
                 ],
                 tasks: ['exec'],
@@ -50,13 +44,6 @@ module.exports = function (grunt) {
                     livereload: true
                 }
             }
-            /* not used at the moment
-            handlebars: {
-                files: [
-                    '<%= yeoman.app %>/templates/*.hbs'
-                ],
-                tasks: ['handlebars']
-            }*/
         },
 
         // testing server
@@ -77,7 +64,7 @@ module.exports = function (grunt) {
             }
         },
 
-        
+
         // express app
         express: {
             options: {
@@ -100,7 +87,7 @@ module.exports = function (grunt) {
                 }
             }
         },
-        
+
 
         // open app and test page
         open: {
@@ -122,13 +109,12 @@ module.exports = function (grunt) {
             },
             all: [
                 'Gruntfile.js',
-                '<%= yeoman.app %>/scripts/{,*/}*.js',
-                '!<%= yeoman.app %>/scripts/vendor/*',
+				'app/scripts/**/*.js',
                 'test/spec/{,*/}*.js'
             ]
         },
 
-        
+
         // compass
         compass: {
             options: {
@@ -147,7 +133,7 @@ module.exports = function (grunt) {
                 }
             }
         },
-        
+
 
         // require
         requirejs: {
@@ -262,27 +248,13 @@ module.exports = function (grunt) {
             all: {
                 rjsConfig: '<%= yeoman.app %>/scripts/main.js'
             }
-        },
-
-        // handlebars
-        handlebars: {
-            compile: {
-                options: {
-                    namespace: 'JST',
-                    amd: true
-                },
-                files: {
-                    '.tmp/scripts/templates.js': ['templates/**/*.hbs']
-                }
-            }
         }
     });
 
     grunt.registerTask('createDefaultTemplate', function () {
         grunt.file.write('.tmp/scripts/templates.js', 'this.JST = this.JST || {};');
     });
-
-    // starts express server with live testing via testserver
+	// starts express server with live testing via testserver
     grunt.registerTask('default', function (target) {
 
         // what is this??
@@ -307,7 +279,6 @@ module.exports = function (grunt) {
     grunt.registerTask('test', [
         'clean:server',
         'createDefaultTemplate',
-        'handlebars',
         'compass',
         'connect:testserver',
         'exec:mocha'
@@ -315,7 +286,6 @@ module.exports = function (grunt) {
 
     grunt.registerTask('build', [
         'createDefaultTemplate',
-        'handlebars',
         'compass:dist',
         'useminPrepare',
         'requirejs',
