@@ -6,6 +6,7 @@ var path = require('path');
 var async = require('async');
 var hbs = require('express-hbs');
 var baucis = require('baucis');
+var api = require('./api');
 
 var mongoose = require('mongoose');
 
@@ -17,17 +18,8 @@ var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function callback () {
 
-	/* test schema */
-    var testSchema = new mongoose.Schema({
-        test: String
-    });
-
-    var Test = mongoose.model( 'test', testSchema );
-
-    /* set Baucis */
-    baucis.rest({
-        singular: 'test'
-    });
+	// initialises our api
+	api.init();
 
 	var app = express();
 
@@ -38,7 +30,7 @@ db.once('open', function callback () {
 	    app.set('views', __dirname + '../app/scripts/views');
 	});
 
-    app.use('/api/v1', baucis());
+    app.use('/api', baucis());
 
 	// simple log
 	app.use(function(req, res, next){
