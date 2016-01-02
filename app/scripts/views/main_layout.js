@@ -1,11 +1,19 @@
 define([
 	'underscore',
 	'marionette',
-	'text!templates/main_layout.html'
+	'text!templates/main_layout.html',
+	'views/header_view',
+	'views/description_view',
+	'views/content_view',
+	'views/footer_view'
 ], function (
 	_,
 	Marionette,
-	Template
+	Template,
+	HeaderView,
+	DescriptionView,
+	ContentView,
+	FooterView
 ) {
 	'use strict';
 
@@ -13,8 +21,45 @@ define([
 
 		template: _.template(Template),
 
-		initialize: function () {
-			console.log(this, 'Initialize Main Layout');
+		regions: {
+			HeaderRegion: '.header',
+			DescriptionRegion: '.description',
+			ContentRegion: '.content',
+			FooterRegion: '.footer'
+		},
+
+		onShow: function () {
+			//this.model.save()
+			//	.done(function () {
+			this.showHeader();
+			this.showDescription();
+			this.showContent();
+			this.showFooter();
+			//});
+		},
+
+		showHeader: function () {
+			this.HeaderRegion.show(new HeaderView({
+				model: this.model
+			}));
+		},
+
+		showDescription: function () {
+			this.DescriptionRegion.show(new DescriptionView({
+				model: this.model
+			}));
+		},
+
+		showContent: function () {
+			this.ContentRegion.show(new ContentView({
+				model: this.model
+			}));
+		},
+
+		showFooter: function () {
+			this.FooterRegion.show(new FooterView({
+				model: this.model
+			}));
 		}
 	});
 });

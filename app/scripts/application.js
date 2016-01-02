@@ -1,9 +1,11 @@
 define([
 	'marionette',
-	'views/main_layout'
+	'views/main_layout',
+	'models/main_model'
 ], function (
 	Marionette,
-	MainView
+	MainView,
+	MainModel
 ) {
 	'use strict';
 
@@ -15,7 +17,9 @@ define([
 	});
 
 	App.addInitializer(function(){
-		App.mainRegion.show(new MainView());
+		App.mainRegion.show(new MainView({
+			model: new MainModel()
+		}));
 	});
 
 	return App;

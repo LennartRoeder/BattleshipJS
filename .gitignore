@@ -5,3 +5,4 @@ dist
 .sass-cache
 app/bower_components
 .tmp/
+main.css.map
