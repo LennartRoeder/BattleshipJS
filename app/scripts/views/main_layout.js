@@ -6,15 +6,13 @@ define([
 	'views/description_view',
 	'views/content_view',
 	'views/footer_view'
-], function (
-	_,
-	Marionette,
-	Template,
-	HeaderView,
-	DescriptionView,
-	ContentView,
-	FooterView
-) {
+], function (_,
+			 Marionette,
+			 Template,
+			 HeaderView,
+			 DescriptionView,
+			 ContentView,
+			 FooterView) {
 	'use strict';
 
 	return Marionette.LayoutView.extend({
@@ -29,13 +27,15 @@ define([
 		},
 
 		onShow: function () {
-			//this.model.save()
-			//	.done(function () {
-			this.showHeader();
-			this.showDescription();
-			this.showContent();
-			this.showFooter();
-			//});
+			var self = this;
+			this.model.save()
+				.done(function (response) {
+					console.log(response);
+					self.showHeader();
+					self.showDescription();
+					self.showContent();
+					self.showFooter();
+				});
 		},
 
 		showHeader: function () {

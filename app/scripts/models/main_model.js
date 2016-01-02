@@ -5,7 +5,7 @@ define([
 ) {
 	'use strict';
 	return Backbone.Model.extend({
-		_defaults: {
+		defaults: {
 			id: null,
 			name:'',
 			coordinate: null
