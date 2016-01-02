@@ -1,6 +1,6 @@
 'use strict';
 
-var Player = require('./models/player');
+var Player = require('./models/player.model');
 
 
 exports.createPlayer = function (req, res) {
@@ -16,7 +16,8 @@ exports.createPlayer = function (req, res) {
 			return res.sendStatus(500);
 		}
 		var result = {
-			id: player._id
+			id: player._id,
+			name: player.name
 		};
 		return res.status(200).send(result);
 	});
