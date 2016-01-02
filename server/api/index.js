@@ -7,6 +7,7 @@ var router = express.Router();
 
 
 router.post('/player', controller.createPlayer);
+router.post('/connect', controller.updatePlayer);
 
 
 module.exports = router;

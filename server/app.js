@@ -6,6 +6,8 @@ var path = require('path');
 var async = require('async');
 var hbs = require('express-hbs');
 var api = require('./api');
+var bodyParser = require('body-parser');
+
 
 var mongoose = require('mongoose');
 
@@ -43,6 +45,10 @@ db.once('open', function callback () {
 	app.get('/', function(req, res){
 	  res.sendfile( path.join( __dirname, '../app/index.html' ) );
 	});
+
+	// support JSON
+	app.use(bodyParser.json()); // support json encoded bodies
+	app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
 	app.use('/api', api);
 
