@@ -1,23 +1,18 @@
 'use strict';
 
 var Player = require('./models/player.model');
+var Session = require('./models/session.model');
 
 
 exports.createPlayer = function (req, res) {
 	var player = new Player();
 
-	if (req.body && req.body.name) {
-		player.name = req.body.name;
-	}
-
 	Player.create(player, function (err, player) {
 		if (err) {
-			console.log(err);
 			return res.sendStatus(500);
 		}
 		var result = {
-			id: player._id,
-			name: player.name
+			id: player._id
 		};
 		return res.status(200).send(result);
 	});
@@ -25,30 +20,50 @@ exports.createPlayer = function (req, res) {
 
 exports.updatePlayer = function (req, res) {
 
-	console.log(req.body);
-
 	if (req.body == null || req.body.id == null) {
 		return res.status(500).send('missing ID');
 	}
 	if (req.body == null || req.body.opponentId == null) {
 		return res.status(500).send('missing opponentId');
 	}
+	var newName;
+	if(req.body !== null) {
+		if (req.body.name !== null && req.body.name.length > 0) {
+			newName = req.body.name;
+		} else {
+			newName = 'player_' + req.body.id;
+		}
+	}
 
-	Player.findById(req.body.opponentId, function (err, user) {
-		if (!user) {
+	Player.findById(req.body.opponentId, function (err, docs) {
+		if (!docs) {
 			return res.status(404).send('no such opponent');
 		}
 
 		Player.findByIdAndUpdate(req.body.id, {
 			$set: {
-				opponentId: req.body.opponentId
+				name: newName
 			}
-		}, function (err, result) {
-			if (err) {
-				console.log(err);
+		}, function (err, docs) {
+			if (!docs) {
 				return res.status(404).send('no such ID');
 			}
-			return res.sendStatus(200);
+
+			var session = new Session();
+			session.player1 = req.body.id;
+			session.player2 = req.body.opponentId;
+
+			Session.create(session, function (err, docs) {
+				if (err) {
+					return res.sendStatus(500);
+				}
+
+				var result = {
+					sessionId: session._id
+				};
+				return res.status(200).send(result);
+			});
+
 		});
 	});
 
