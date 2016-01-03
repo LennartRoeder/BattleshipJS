@@ -3,7 +3,9 @@
 var mongoose = require('mongoose');
 
 var schema = new mongoose.Schema({
-	name : String
+	name : String,
+	ships: [{ type: mongoose.Schema.ObjectId, ref: 'Ship' }]
+
 });
 
 module.exports = mongoose.model('Player', schema);

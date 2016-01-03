@@ -1,9 +1,14 @@
 'use strict';
 
-var Player = require('./models/player.model');
-var Session = require('./models/session.model');
+var Player = require('./../models/player.model.js');
+var Session = require('./../models/session.model.js');
 
-
+/**
+ * creates a new player
+ * @param req nothing
+ * @param res playerId
+ * @returns {playerId}
+ */
 exports.createPlayer = function (req, res) {
 	var player = new Player();
 
@@ -18,7 +23,13 @@ exports.createPlayer = function (req, res) {
 	});
 };
 
-exports.updatePlayer = function (req, res) {
+/**
+ * connects to another player and creates a session
+ * @param req playerId, opponentId
+ * @param res sessionId
+ * @returns {sessionId}
+ */
+exports.connect = function (req, res) {
 
 	if (req.body == null || req.body.id == null) {
 		return res.status(500).send('missing ID');
