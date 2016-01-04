@@ -8,7 +8,7 @@ var hbs = require('express-hbs');
 var api = require('./api');
 var bodyParser = require('body-parser');
 
-
+var socketIO = require('socket.io');
 var mongoose = require('mongoose');
 
 // start mongoose
