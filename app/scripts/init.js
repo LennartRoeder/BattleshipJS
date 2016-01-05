@@ -30,6 +30,7 @@ require.config({
         'backbone.wreqr': '../bower_components/backbone.wreqr/lib/backbone.wreqr',
         'backbone.babysitter': '../bower_components/backbone.babysitter/lib/backbone.babysitter',
 		'bbstickit': '../bower_components/backbone.stickit/backbone.stickit',
+
         /* alias the bootstrap js lib */
         bootstrap: '../vendor/bootstrap',
 

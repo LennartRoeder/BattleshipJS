@@ -31,7 +31,7 @@ exports.createPlayer = function (req, res) {
  */
 exports.connect = function (req, res) {
 
-	if (req.body == null || req.body.id == null) {
+	if (req.body == null || req.body.playerId == null) {
 		return res.status(500).send('missing ID');
 	}
 	if (req.body == null || req.body.opponentId == null) {
@@ -42,7 +42,7 @@ exports.connect = function (req, res) {
 		if (req.body.name !== null && req.body.name.length > 0) {
 			newName = req.body.name;
 		} else {
-			newName = 'player_' + req.body.id;
+			newName = 'player_' + req.body.playerId;
 		}
 	}
 
@@ -51,7 +51,7 @@ exports.connect = function (req, res) {
 			return res.status(404).send('no such opponent');
 		}
 
-		Player.findByIdAndUpdate(req.body.id, {
+		Player.findByIdAndUpdate(req.body.playerId, {
 			$set: {
 				name: newName
 			}
@@ -61,7 +61,7 @@ exports.connect = function (req, res) {
 			}
 
 			var session = new Session();
-			session.player1 = req.body.id;
+			session.player1 = req.body.playerId;
 			session.player2 = req.body.opponentId;
 
 			Session.create(session, function (err, docs) {
