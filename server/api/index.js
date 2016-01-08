@@ -10,7 +10,7 @@ var router = express.Router();
 router.post('/player', player.createPlayer);
 router.post('/connect', player.connect);
 
-router.post('/shoot', game.shoot);
+router.get('/shoot', game.shoot);
 
 
 module.exports = router;

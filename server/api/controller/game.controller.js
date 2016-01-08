@@ -10,8 +10,10 @@ var Ship = require('./../models/ship.model.js');
  * @returns {String}
  */
 exports.shoot = function (req, res) {
-	console.log('shooting at: ', req.body.target);
+	//console.log('shooting at: ', req.body.target);
+	console.log('shooting');
 
+	res.send('success');
 
 };
 

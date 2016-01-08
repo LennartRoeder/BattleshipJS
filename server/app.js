@@ -8,7 +8,7 @@ var hbs = require('express-hbs');
 var api = require('./api');
 var bodyParser = require('body-parser');
 
-var socketIO = require('socket.io');
+var io = require('socket.io')(http);
 var mongoose = require('mongoose');
 
 // start mongoose
@@ -51,6 +51,18 @@ db.once('open', function callback () {
 	app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
 	app.use('/api', api);
+
+	io.on('connection', function(socket){
+		console.log('a user connected');
+
+		socket.on('chat message', function(msg){
+			io.emit('chat message', msg);
+		});
+
+		socket.on('disconnect', function(){
+			console.log('user disconnected');
+		});
+	});
 
 });
 
