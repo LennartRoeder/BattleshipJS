@@ -3,7 +3,6 @@
 var express = require('express');
 var http = require('http');
 var path = require('path');
-var async = require('async');
 var hbs = require('express-hbs');
 var api = require('./api');
 var bodyParser = require('body-parser');
