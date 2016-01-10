@@ -8,8 +8,11 @@ var hbs = require('express-hbs');
 var api = require('./api');
 var bodyParser = require('body-parser');
 
-var io = require('socket.io')(http);
 var mongoose = require('mongoose');
+
+var app = express();
+var server = http.createServer(app);
+var io = require('socket.io').listen(server);
 
 // start mongoose
 mongoose.connect('mongodb://localhost/sit');
@@ -18,9 +21,7 @@ var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function callback () {
 
-	var app = express();
-
-	var server = app.listen(9000, function () {
+	server.listen(9000, function () {
 		var host = server.address().address;
 		var port = server.address().port;
 
@@ -53,11 +54,7 @@ db.once('open', function callback () {
 	app.use('/api', api);
 
 	io.on('connection', function(socket){
-		console.log('a user connected');
-
-		socket.on('chat message', function(msg){
-			io.emit('chat message', msg);
-		});
+		console.log('a user connected!');
 
 		socket.on('disconnect', function(){
 			console.log('user disconnected');
