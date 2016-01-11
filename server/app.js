@@ -55,6 +55,8 @@ db.once('open', function callback () {
 	io.on('connection', function(socket){
 		console.log('a user connected!');
 
+		io.emit('test', 'Hallo Socket!');
+
 		socket.on('disconnect', function(){
 			console.log('user disconnected');
 		});

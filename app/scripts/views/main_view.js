@@ -7,6 +7,7 @@ define([
 	'text!templates/game_view.html',
 	'models/connect_model',
 	'models/main_model',
+	'commons/socketio',
 	'bbstickit'
 ], function (
 	_,
@@ -16,7 +17,8 @@ define([
 	Template,
 	GameTemplate,
 	ConnectModel,
-	PlayerModel
+	PlayerModel,
+	io
 ) {
 	'use strict';
 
@@ -36,6 +38,11 @@ define([
 
 		initialize: function () {
 			var self = this;
+
+			io.on('test', function (data) {
+				console.log(data);
+			});
+
 			this.model = new ConnectModel();
 			this.playerModel = new PlayerModel();
 			this.playerModel.save().

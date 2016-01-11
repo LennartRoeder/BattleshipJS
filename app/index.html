@@ -17,12 +17,8 @@
 
         <link rel="stylesheet" href="styles/main.css">
 
-
         <!-- build:js scripts/vendor/modernizr.js -->
         <script src="bower_components/modernizr/modernizr.js"></script>
-
-		<!--TODO: @Nadja: Pls put this were it belongs.-->
-		<script src="/socket.io/socket.io.js"></script>
         <!-- endbuild -->
 
     </head>
@@ -36,9 +32,6 @@
         <!-- endbuild -->
 
         <script>
-			// TODO: @Nadja: Pls put this were it belongs
-			var socket = io();
-
 			document.write('<script src="http://'
             + (location.host || 'localhost').split(':')[0]
             + ':35729/livereload.js?snipver=1"><\/script>');
