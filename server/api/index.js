@@ -7,7 +7,7 @@ var game = require('./controller/game.controller.js');
 var router = express.Router();
 
 
-router.post('/player', player.createPlayer);
+router.post('/init', player.init);
 router.post('/connect', player.connect);
 
 router.get('/shoot', game.shoot);

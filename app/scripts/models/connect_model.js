@@ -12,6 +12,6 @@ define([
 			'opponentId': null
 		},
 
-		url: 'http://localhost:9000/api/player'
+		url: 'http://localhost:9000/api/init'
 	});
 });

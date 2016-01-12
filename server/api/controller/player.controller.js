@@ -9,7 +9,7 @@ var Session = require('./../models/session.model.js');
  * @param res playerId
  * @returns {playerId}
  */
-exports.createPlayer = function (req, res) {
+exports.init = function (req, res) {
 	var player = new Player();
 
 	Player.create(player, function (err, player) {
@@ -17,7 +17,11 @@ exports.createPlayer = function (req, res) {
 			return res.sendStatus(500);
 		}
 		var result = {
-			id: player._id
+			id: player._id,
+			players: [{
+				id: 'id',
+				name: 'name'
+			}]
 		};
 		return res.status(200).send(result);
 	});
