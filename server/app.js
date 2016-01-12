@@ -4,14 +4,12 @@ var express = require('express');
 var http = require('http');
 var path = require('path');
 var hbs = require('express-hbs');
-var api = require('./api');
 var bodyParser = require('body-parser');
-
 var mongoose = require('mongoose');
 
-var app = express();
-var server = http.createServer(app);
-var io = require('socket.io').listen(server);
+var api = require('./api');
+var io = require('./socket');
+
 
 // start mongoose
 mongoose.connect('mongodb://localhost/sit');
@@ -19,6 +17,10 @@ var db = mongoose.connection;
 
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function callback () {
+
+	var app = express();
+	var server = http.createServer(app);
+	io.init.listen(server);
 
 	server.listen(9000, function () {
 		var host = server.address().address;
@@ -51,17 +53,6 @@ db.once('open', function callback () {
 	app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
 	app.use('/api', api);
-
-	io.on('connection', function(socket){
-		console.log('a user connected!');
-
-		io.emit('test', 'Hallo Socket!');
-
-		socket.on('disconnect', function(){
-			console.log('user disconnected');
-		});
-	});
-
 });
 
 
