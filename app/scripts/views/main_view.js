@@ -6,7 +6,6 @@ define([
 	'text!templates/main_view.html',
 	'text!templates/game_view.html',
 	'models/connect_model',
-	'models/main_model',
 	'commons/socketio',
 	'bbstickit'
 ], function (
@@ -17,7 +16,6 @@ define([
 	Template,
 	GameTemplate,
 	ConnectModel,
-	PlayerModel,
 	io
 ) {
 	'use strict';
@@ -36,24 +34,22 @@ define([
 			'click .connect': 'onClickConnect'
 		},
 
+		model: new ConnectModel(),
+
 		initialize: function () {
 			var self = this;
 
-			io.on('test', function (data) {
-				console.log(data);
+			io.on('id', function (msg, id) {
+				console.log(id);
+				self.model.set('playerId', id);
 			});
-
-			this.model = new ConnectModel();
-			this.playerModel = new PlayerModel();
-			this.playerModel.save().
-				done(function () {
-					self.model.set('playerId', self.playerModel.get('id'));
-				});
 		},
 
 		onClickConnect: function () {
-			this.model.url = 'http://localhost:9000/api/connect';
-			this.model.save();
+			var id = this.model.get('playerId');
+			var data = this.model.toJSON();
+
+			io.emit(id, data);
 		},
 
 		onRender: function () {
