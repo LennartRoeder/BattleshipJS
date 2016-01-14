@@ -6,7 +6,6 @@ define([
 	'text!templates/main_view.html',
 	'text!templates/game_view.html',
 	'models/connect_model',
-	'models/main_model',
 	'commons/socketio',
 	'bbstickit'
 ], function (
@@ -17,7 +16,6 @@ define([
 	Template,
 	GameTemplate,
 	ConnectModel,
-	PlayerModel,
 	io
 ) {
 	'use strict';
@@ -27,9 +25,23 @@ define([
 		template: _.template(Template),
 
 		bindings: {
-			'.id': 'playerId',
+			'.id': {
+				observe: 'playerId',
+				onGet: function (value) {
+					if(value){
+						return value.slice(6);
+					}
+				}
+			},
 			'.name': 'name',
-			'.opponent': 'opponentId'
+			'.opponent': {
+				observe: 'opponentId',
+				onSet: function (value) {
+					if(value){
+						return '/init#' + value;
+					}
+				}
+			}
 		},
 
 		events: {
