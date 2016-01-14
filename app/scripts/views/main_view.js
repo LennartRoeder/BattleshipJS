@@ -25,9 +25,23 @@ define([
 		template: _.template(Template),
 
 		bindings: {
-			'.id': 'playerId',
+			'.id': {
+				observe: 'playerId',
+				onGet: function (value) {
+					 if(value){
+						 return value.slice(6);
+					 }
+				}
+			},
 			'.name': 'name',
-			'.opponent': 'opponentId'
+			'.opponent': {
+				observe: 'opponentId',
+				onSet: function (value) {
+					if(value){
+						return '/init#' + value;
+					}
+				}
+			}
 		},
 
 		events: {
@@ -39,7 +53,7 @@ define([
 		initialize: function () {
 			var self = this;
 
-			io.on('id', function (msg, id) {
+			io.on('id', function (id) {
 				console.log(id);
 				self.model.set('playerId', id);
 			});

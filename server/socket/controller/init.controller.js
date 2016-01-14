@@ -7,7 +7,7 @@ module.exports.listen = function (server) {
 	nsp.on('connection', function (socket) {
 		console.log('a user connected!');
 
-		nsp.emit('test', 'Hallo Socket!');
+		nsp.emit('id', socket.id);
 
 		socket.on('disconnect', function () {
 			console.log('user disconnected');
