@@ -1,7 +1,7 @@
 'use strict';
 
-var Player = require('./../models/player.model.js');
-var Session = require('./../models/session.model.js');
+var Player = require('../../models/player.model.js');
+var Session = require('../../models/session.model.js');
 
 /**
  * creates a new player

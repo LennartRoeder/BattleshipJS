@@ -12,7 +12,7 @@ var io = require('./socket');
 
 
 // start mongoose
-mongoose.connect('mongodb://localhost/sit');
+mongoose.connect('mongodb://localhost/battleship');
 var db = mongoose.connection;
 
 db.on('error', console.error.bind(console, 'connection error:'));

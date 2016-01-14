@@ -1,7 +1,7 @@
 'use strict';
 
-var GameState = require('./../models/gameState.model.js');
-var Ship = require('./../models/ship.model.js');
+var GameState = require('../../models/gameState.model.js');
+var Ship = require('../../models/ship.model.js');
 
 /**
  *
