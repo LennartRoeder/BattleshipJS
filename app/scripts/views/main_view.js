@@ -56,8 +56,6 @@ define([
 			io.on('id', function (id) {
 				console.log(id);
 				self.model.set('playerId', id);
-
-				//io.emit('createSession', {opponentId: '/init#_Aoihc72KxpCUZghAAAB'});
 			});
 		},
 
