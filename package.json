@@ -3,7 +3,6 @@
   "version": "0.0.1",
   "dependencies": {
     "body-parser": "~1.14.2",
-    "bower": "~1.7.2",
     "express": "~4.13.3",
     "express-hbs": "~0.8.4",
     "mongodb": "~2.1.2",
