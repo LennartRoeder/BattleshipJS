@@ -56,6 +56,12 @@ define([
 			io.on('id', function (id) {
 				console.log(id);
 				self.model.set('playerId', id);
+
+				io.emit('createSession', {
+					name: 'Schatzi',
+					senderId: '/init#OObSwMcUpJJVvsRmAAAA',
+					opponentId: '/init#JbgNJdr8BjQ9lleOAAAA'
+				});
 			});
 		},
 

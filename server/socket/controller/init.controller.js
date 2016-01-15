@@ -8,6 +8,30 @@ module.exports.listen = function (server) {
 	nsp.on('connection', function (socket) {
 		console.log('User ' + socket.id + ' connected!');
 
+		createPlayer(socket);
+
+		socket.on('createSession', function (data) {
+			if (data.opponentId) {
+				getSpecificOpponent(data, function (opponent) {
+					if (opponent) {
+						console.log('specific Opponent found');
+						//createSession(data, opponent);
+					} else {
+						console.log('NO specific Opponent found');
+						getLongestWaitingOpponent(data);
+					}
+				});
+			} else {
+				getLongestWaitingOpponent(data);
+			}
+		});
+
+		socket.on('disconnect', function () {
+			console.log('a user disconnected');
+		});
+	});
+
+	var createPlayer = function (socket) {
 		var player = new Player();
 		player.socketId = socket.id;
 
@@ -17,15 +41,25 @@ module.exports.listen = function (server) {
 			}
 			nsp.to(socket.id).emit('id', socket.id);
 		});
+	};
 
-		socket.on('disconnect', function () {
-			console.log('a user disconnected');
+	var getSpecificOpponent = function (data, callback) {
+		Player.findOne({SocketID: data.OpponentId}, function (err, opponent) {
+			if (err) return handleError(err);
+			callback(opponent);
 		});
-	});
+	};
 
-	nsp.on('connection', function (socket) {
+	var getLongestWaitingOpponent = function (data, callback) {
+		console.log('getLongestWaitingOpponent()');
+		//if(!opponent) {
+		//	nsp.to(data.senderId).emit('createSession', 'no Opponent found');
+		//}
+	};
 
-	});
+	var createSession = function(playerA, playerB) {
+
+	};
 
 	return io;
 };
