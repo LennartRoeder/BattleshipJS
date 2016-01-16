@@ -12,7 +12,7 @@ module.exports.init = function (io) {
 		init.createPlayer(socket, nsp);
 
 		socket.on('createSession', function(data) {
-			init.createSession(socket, data.opponentId);
+			init.createSession(socket, nsp, data.opponentId);
 		});
 
 		socket.on('disconnect', function () {
