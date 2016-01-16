@@ -1,6 +1,7 @@
 'use strict';
 
 var express = require('express');
+var socketIO = require('socket.io');
 var http = require('http');
 var path = require('path');
 var hbs = require('express-hbs');
@@ -8,7 +9,7 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 
 var api = require('./api');
-var io = require('./socket');
+var socket = require('./socket');
 
 
 // start mongoose
@@ -20,7 +21,8 @@ db.once('open', function callback () {
 
 	var app = express();
 	var server = http.createServer(app);
-	io.init.listen(server);
+	var io = socketIO.listen(server);
+	socket.init(io);
 
 	server.listen(9000, function () {
 		var host = server.address().address;
