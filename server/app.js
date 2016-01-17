@@ -8,7 +8,7 @@ var hbs = require('express-hbs');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 
-var api = require('./api');
+//var api = require('./api');
 var socket = require('./socket');
 
 
@@ -54,7 +54,7 @@ db.once('open', function callback () {
 	app.use(bodyParser.json()); // support json encoded bodies
 	app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
-	app.use('/api', api);
+	//app.use('/api', api);
 });
 
 
