@@ -4,6 +4,6 @@ define([
 	io
 ) {
 	'use strict';
-	var socket = io('/init');
-	return socket;
+	//var socket = io('/init');
+	return io;
 });

@@ -53,17 +53,25 @@ define([
 		initialize: function () {
 			var self = this;
 
-			io.on('id', function (id) {
+			var socket = io('/init');
+
+			socket.on('id', function (id) {
 				console.log(id);
 				self.model.set('playerId', id);
 
-				io.emit('createSession', {
+				socket.emit('createSession', {
 					name: 'Schatzi',
 					opponentId: '/init#JbgNJdr8BjQ9lleOAAAA_'
 				});
 
-				io.on('createSession', function(data) {
-					console.log('sessionId:', data);
+				socket.on('createSession', function(sessionId) {
+					console.log('sessionId:', sessionId);
+
+					var gameSocket = io('/' + sessionId);
+
+					gameSocket.on('welcome', function(message) {
+						console.log(message);
+					});
 				});
 			});
 		},

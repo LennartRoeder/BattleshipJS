@@ -15,17 +15,21 @@ module.exports.createPlayer = function (socket, nsp) {
 	});
 };
 
-module.exports.createSession = function (socket, nsp, opponentId) {
+module.exports.createSession = function (socket, nsp, opponentId, callback) {
 	if (opponentId) {
 		getPlayerFromSocketId(opponentId, function (opponent) {
 			if (opponent) {
-				console.log('specific Opponent found!');
-				createSessionFromUsers(nsp, socket.id, opponent);
+				//console.log('specific Opponent found!');
+				createSessionFromUsers(nsp, socket.id, opponent, function (sessionId) {
+					return callback(sessionId);
+				});
 			} else {
-				console.log('NO specific Opponent found!');
+				//console.log('NO specific Opponent found!');
 				getLongestWaitingPlayer(socket, function (player) {
 					if (player) {
-						createSessionFromUsers(nsp, socket.id, player);
+						createSessionFromUsers(nsp, socket.id, player, function (sessionId) {
+							return callback(sessionId);
+						});
 					} else {
 						nsp.to(socket.id).emit('createSession', 'no Opponent found');
 					}
@@ -34,7 +38,9 @@ module.exports.createSession = function (socket, nsp, opponentId) {
 		});
 	} else {
 		getLongestWaitingPlayer(socket, function (player) {
-			createSessionFromUsers(nsp, socket.id, player);
+			createSessionFromUsers(nsp, socket.id, player, function (sessionId) {
+				return callback(sessionId);
+			});
 		});
 	}
 };
@@ -50,13 +56,14 @@ var getPlayerFromSocketId = function (data, callback) {
 };
 
 var getLongestWaitingPlayer = function (socket, callback) {
-	console.log('getLongestWaitingPlayer()');
+	//console.log('getLongestWaitingPlayer()');
 	Player.findOne({'socketId': {$ne: socket.id}}, {}, {sort: {'created_at': 1}}, function (err, player) {
 		return callback(player);
 	});
 };
 
-var createSessionFromUsers = function (nsp, currentUserId, player2) {
+var createSessionFromUsers = function (nsp, currentUserId, player2, callback) {
+	//console.log('createSessionFromUsers');
 	getPlayerFromSocketId(currentUserId, function (player1) {
 
 		var session = new Session({
@@ -72,6 +79,8 @@ var createSessionFromUsers = function (nsp, currentUserId, player2) {
 			}
 			nsp.to(player1.socketId).emit('createSession', session._id);
 			nsp.to(player2.socketId).emit('createSession', session._id);
+
+			return callback(session._id);
 		});
 	});
 };
