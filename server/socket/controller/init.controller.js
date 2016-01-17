@@ -23,7 +23,7 @@ module.exports.createSession = function (socket, nsp, opponentId) {
 				createSessionFromUsers(nsp, socket.id, opponent);
 			} else {
 				console.log('NO specific Opponent found!');
-				getLongestWaitingPlayer(function (player) {
+				getLongestWaitingPlayer(socket, function (player) {
 					if (player) {
 						createSessionFromUsers(nsp, socket.id, player);
 					} else {
@@ -33,7 +33,7 @@ module.exports.createSession = function (socket, nsp, opponentId) {
 			}
 		});
 	} else {
-		getLongestWaitingPlayer(function (player) {
+		getLongestWaitingPlayer(socket, function (player) {
 			createSessionFromUsers(nsp, socket.id, player);
 		});
 	}
@@ -49,12 +49,11 @@ var getPlayerFromSocketId = function (data, callback) {
 	});
 };
 
-var getLongestWaitingPlayer = function (callback) {
+var getLongestWaitingPlayer = function (socket, callback) {
 	console.log('getLongestWaitingPlayer()');
-	Player.findOne({}, {}, {sort: {'created_at': 1}}, function (err, player) {
+	Player.findOne({'socketId': {$ne: socket.id}}, {}, {sort: {'created_at': 1}}, function (err, player) {
 		return callback(player);
 	});
-	// TODO: make sure the longest waiting player is not the player who sent the request.
 };
 
 var createSessionFromUsers = function (nsp, currentUserId, player2) {
@@ -76,5 +75,3 @@ var createSessionFromUsers = function (nsp, currentUserId, player2) {
 		});
 	});
 };
-
-

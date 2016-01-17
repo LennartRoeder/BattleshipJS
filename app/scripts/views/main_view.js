@@ -59,7 +59,11 @@ define([
 
 				io.emit('createSession', {
 					name: 'Schatzi',
-					opponentId: '/init#JbgNJdr8BjQ9lleOAAAA'
+					opponentId: '/init#JbgNJdr8BjQ9lleOAAAA_'
+				});
+
+				io.on('createSession', function(data) {
+					console.log('sessionId:', data);
 				});
 			});
 		},
