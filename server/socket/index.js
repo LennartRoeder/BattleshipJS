@@ -19,6 +19,7 @@ module.exports.init = function (io) {
 
 		socket.on('disconnect', function () {
 			console.log('a user disconnected');
+			// TODO: delete user from DB
 		});
 	});
 };
@@ -30,6 +31,8 @@ var createGame = function (io, sessionId) {
 		console.log('Player ' + socket.id + ' connected!');
 
 		socket.emit('welcome', 'welcome to the game!');
+
+		console.log('number of players:', socket.server.eio.clientsCount);
 
 		// TODO: implement game logic
 

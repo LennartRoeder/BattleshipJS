@@ -20,6 +20,9 @@ define([
 ) {
 	'use strict';
 
+	// TODO: this instantiation looks wrong, could you place it, were it belongs pls.
+	var initSocket;
+
 	return Marionette.ItemView.extend({
 
 		template: _.template(Template),
@@ -53,34 +56,40 @@ define([
 		initialize: function () {
 			var self = this;
 
-			var socket = io('/init');
+			initSocket = io('/init');
 
-			socket.on('id', function (id) {
+			initSocket.on('id', function (id) {
 				console.log(id);
 				self.model.set('playerId', id);
+			});
 
-				socket.emit('createSession', {
-					name: 'Schatzi',
-					opponentId: '/init#JbgNJdr8BjQ9lleOAAAA_'
-				});
+			// listens for game connections
+			initSocket.on('createSession', function(sessionId) {
+				console.log('sessionId:', sessionId);
 
-				socket.on('createSession', function(sessionId) {
-					console.log('sessionId:', sessionId);
+				var gameSocket = io('/' + sessionId);
 
-					var gameSocket = io('/' + sessionId);
+				initSocket.disconnect();
 
-					gameSocket.on('welcome', function(message) {
-						console.log(message);
-					});
+				gameSocket.on('welcome', function(message) {
+					console.log(message);
 				});
 			});
 		},
 
+		// TODO: We need to send the name before this, otherwise the second player has no way to set a name
+		// 1. connect to socket
+		// 2. send name (this is part of the next step till now)
+		// 3. start game or get picked by other player
 		onClickConnect: function () {
+			console.log('button clicked!');
 			var id = this.model.get('playerId');
 			var data = this.model.toJSON();
 
-			io.emit(id, data);
+			// connect to game
+			// TODO: Pls remove the playerID from data, it is not needed anymore.
+			console.log('data:', data);
+			initSocket.emit('createSession', data);
 		},
 
 		onRender: function () {
