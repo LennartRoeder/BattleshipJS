@@ -1,5 +1,6 @@
 var Player = require('../../models/player.model');
 var Session = require('../../models/session.model');
+var util = require('./util');
 
 module.exports.createPlayer = function (socket, nsp) {
 	var player = new Player({
@@ -17,7 +18,7 @@ module.exports.createPlayer = function (socket, nsp) {
 
 module.exports.createSession = function (socket, nsp, opponentId, callback) {
 	if (opponentId) {
-		getPlayerFromSocketId(opponentId, function (opponent) {
+		util.getPlayerFromSocketId(opponentId, function (opponent) {
 			if (opponent) {
 				//console.log('specific Opponent found!');
 				createSessionFromUsers(nsp, socket.id, opponent, function (sessionId) {
@@ -45,16 +46,6 @@ module.exports.createSession = function (socket, nsp, opponentId, callback) {
 	}
 };
 
-
-var getPlayerFromSocketId = function (data, callback) {
-	Player.findOne({socketId: data}, function (err, player) {
-		if (err) {
-			console.log(err);
-		}
-		return callback(player);
-	});
-};
-
 var getLongestWaitingPlayer = function (socket, callback) {
 	//console.log('getLongestWaitingPlayer()');
 	Player.findOne({'socketId': {$ne: socket.id}}, {}, {sort: {'created_at': 1}}, function (err, player) {
@@ -64,7 +55,7 @@ var getLongestWaitingPlayer = function (socket, callback) {
 
 var createSessionFromUsers = function (nsp, currentUserId, player2, callback) {
 	//console.log('createSessionFromUsers');
-	getPlayerFromSocketId(currentUserId, function (player1) {
+	util.getPlayerFromSocketId(currentUserId, function (player1) {
 
 		var session = new Session({
 			player1: player1,

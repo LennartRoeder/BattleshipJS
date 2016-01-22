@@ -8,16 +8,14 @@ define([
 	'models/connect_model',
 	'commons/socketio',
 	'bbstickit'
-], function (
-	_,
-	$,
-	Backbone,
-	Marionette,
-	Template,
-	GameTemplate,
-	ConnectModel,
-	io
-) {
+], function (_,
+			 $,
+			 Backbone,
+			 Marionette,
+			 Template,
+			 GameTemplate,
+			 ConnectModel,
+			 io) {
 	'use strict';
 
 	// TODO: this instantiation looks wrong, could you place it, were it belongs pls.
@@ -31,7 +29,7 @@ define([
 			'.id': {
 				observe: 'playerId',
 				onGet: function (value) {
-					if(value){
+					if (value) {
 						return value.slice(6);
 					}
 				}
@@ -40,7 +38,7 @@ define([
 			'.opponent': {
 				observe: 'opponentId',
 				onSet: function (value) {
-					if(value){
+					if (value) {
 						return '/init#' + value;
 					}
 				}
@@ -59,21 +57,31 @@ define([
 			initSocket = io('/init');
 
 			initSocket.on('id', function (id) {
-				console.log(id);
 				self.model.set('playerId', id);
 			});
 
 			// listens for game connections
-			initSocket.on('createSession', function(sessionId) {
-				console.log('sessionId:', sessionId);
-
+			initSocket.on('createSession', function (sessionId) {
 				var gameSocket = io('/' + sessionId);
+
+				var oldSocketId = self.model.get('playerId');
+				gameSocket.emit('updateSocketId', oldSocketId);
+
+				self.model.set('playerId', ''); // not needed anymore. Was just needed for finding friend
 
 				initSocket.disconnect();
 
-				gameSocket.on('welcome', function(message) {
+				gameSocket.on('welcome', function (message) {
 					console.log(message);
+
+					var ships = [
+						['A1', 'B1'],
+						['C5', 'D5', 'E5']
+					];
+					gameSocket.emit('setShips', ships);
+					console.log('ships set');
 				});
+
 			});
 		},
 
@@ -82,13 +90,11 @@ define([
 		// 2. send name (this is part of the next step till now)
 		// 3. start game or get picked by other player
 		onClickConnect: function () {
-			console.log('button clicked!');
 			var id = this.model.get('playerId');
 			var data = this.model.toJSON();
 
 			// connect to game
 			// TODO: Pls remove the playerID from data, it is not needed anymore.
-			console.log('data:', data);
 			initSocket.emit('createSession', data);
 		},
 
