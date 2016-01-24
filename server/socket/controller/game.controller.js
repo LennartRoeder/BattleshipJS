@@ -1,9 +1,8 @@
 var Ship = require('../../models/ship.model');
 var util = require('./util');
 
-module.exports.setShips = function (socket, nsp, rawShips) {
+module.exports.setShips = function (socket, nsp, rawShips, callback) {
 	// TODO: validate ship data
-
 	util.getPlayerFromSocketId(socket.id, function (player) {
 		var ships = [];
 
@@ -24,12 +23,21 @@ module.exports.setShips = function (socket, nsp, rawShips) {
 		});
 
 		player.ships = ships;
+		player.shipsSet = true;
 
 		player.save(function (err) {
 			if (err) return handleError(err);
+
+			callback();
 		});
 
 	});
+};
+
+module.exports.shoot = function (target, callback) {
+	// TODO: check if it really is the players turn
+
+	console.log('The target is:', target);
 };
 
 

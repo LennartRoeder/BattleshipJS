@@ -64,10 +64,7 @@ define([
 			initSocket.on('createSession', function (sessionId) {
 				var gameSocket = io('/' + sessionId);
 
-				var oldSocketId = self.model.get('playerId');
-				gameSocket.emit('updateSocketId', oldSocketId);
-
-				self.model.set('playerId', ''); // not needed anymore. Was just needed for finding friend
+				console.log('sessionId:', sessionId);
 
 				initSocket.disconnect();
 
@@ -80,6 +77,17 @@ define([
 					];
 					gameSocket.emit('setShips', ships);
 					console.log('ships set');
+
+					gameSocket.on('turn', function(message) {
+						console.log(message);
+
+						var target = 'B1';
+						gameSocket.emit('shoot', target);
+					});
+				});
+
+				gameSocket.on('playerLost', function (message) {
+					console.log(message);
 				});
 
 			});

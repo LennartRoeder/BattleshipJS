@@ -20,12 +20,10 @@ module.exports.createSession = function (socket, nsp, opponentId, callback) {
 	if (opponentId) {
 		util.getPlayerFromSocketId(opponentId, function (opponent) {
 			if (opponent) {
-				//console.log('specific Opponent found!');
 				createSessionFromUsers(nsp, socket.id, opponent, function (sessionId) {
 					return callback(sessionId);
 				});
 			} else {
-				//console.log('NO specific Opponent found!');
 				getLongestWaitingPlayer(socket, function (player) {
 					if (player) {
 						createSessionFromUsers(nsp, socket.id, player, function (sessionId) {
@@ -47,14 +45,12 @@ module.exports.createSession = function (socket, nsp, opponentId, callback) {
 };
 
 var getLongestWaitingPlayer = function (socket, callback) {
-	//console.log('getLongestWaitingPlayer()');
 	Player.findOne({'socketId': {$ne: socket.id}}, {}, {sort: {'created_at': 1}}, function (err, player) {
 		return callback(player);
 	});
 };
 
 var createSessionFromUsers = function (nsp, currentUserId, player2, callback) {
-	//console.log('createSessionFromUsers');
 	util.getPlayerFromSocketId(currentUserId, function (player1) {
 
 		var session = new Session({
@@ -70,6 +66,9 @@ var createSessionFromUsers = function (nsp, currentUserId, player2, callback) {
 			}
 			nsp.to(player1.socketId).emit('createSession', session._id);
 			nsp.to(player2.socketId).emit('createSession', session._id);
+
+			util.updateSocketId(player1, session._id);
+			util.updateSocketId(player2, session._id);
 
 			return callback(session._id);
 		});
