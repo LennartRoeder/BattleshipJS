@@ -19,6 +19,10 @@ module.exports.setShips = function (socket, nsp, rawShips, callback) {
 				});
 			});
 
+			ship.save(function (err) {
+				if (err) return handleError(err);
+			});
+
 			ships.push(ship);
 		});
 
