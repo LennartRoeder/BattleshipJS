@@ -13,7 +13,9 @@ var socket = require('./socket');
 
 
 // start mongoose
-mongoose.connect('mongodb://localhost/battleship');
+mongoose.connect('mongodb://localhost/battleship', function() {
+	mongoose.connection.db.dropDatabase();
+});
 var db = mongoose.connection;
 
 db.on('error', console.error.bind(console, 'connection error:'));
