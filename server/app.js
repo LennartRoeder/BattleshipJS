@@ -55,8 +55,6 @@ db.once('open', function callback () {
 	// support JSON
 	app.use(bodyParser.json()); // support json encoded bodies
 	app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
-
-	//app.use('/api', api);
 });
 
 
