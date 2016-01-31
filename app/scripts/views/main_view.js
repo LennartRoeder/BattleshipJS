@@ -78,15 +78,20 @@ define([
 					gameSocket.emit('setShips', ships);
 					console.log('ships set');
 
-					gameSocket.on('turn', function(message) {
+					gameSocket.on('turn', function (message) {
 						console.log(message);
 
 						var target = 'B1';
+						console.log('shooting at', target);
 						gameSocket.emit('shoot', target);
+					});
+
+					gameSocket.on('shoot', function (message) {
+						console.log(message);
 					});
 				});
 
-				gameSocket.on('playerLost', function (message) {
+				gameSocket.on('playerLeft', function (message) {
 					console.log(message);
 				});
 

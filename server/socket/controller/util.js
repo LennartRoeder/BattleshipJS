@@ -1,11 +1,9 @@
 var Player = require('../../models/player.model');
 var Session = require('../../models/session.model');
 
-module.exports.getPlayerFromSocketId = function (data, callback) {
-	Player.findOne({socketId: data}, function (err, player) {
-		if (err) {
-			console.log(err);
-		}
+module.exports.getPlayerFromSocketId = function (socketId, callback) {
+	Player.findOne({socketId: socketId}, function (err, player) {
+		if (err) console.log(err);
 		return callback(player);
 	});
 };
@@ -23,7 +21,7 @@ module.exports.getPlayerWithTurn = function (sessionId, callback) {
 		.populate('turn')
 		.exec(function (err, session) {
 			if (err) console.log(err);
-			callback(session.turn.socketId);
+			return callback(session.turn);
 		});
 };
 
